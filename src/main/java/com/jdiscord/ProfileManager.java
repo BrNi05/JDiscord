@@ -1,14 +1,18 @@
 package com.jdiscord;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.ComboBoxModel;
 
-import javax.swing.*;
 import java.io.FileWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
  * An aggregate class to hold profile data for serialization.

@@ -1,10 +1,22 @@
 package com.jdiscord;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
+
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
+import java.net.URISyntaxException;
+import java.net.MalformedURLException;
+
 import java.nio.file.Files;
+
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
+
 import java.util.List;
 
 import com.google.gson.Gson;

@@ -1,7 +1,10 @@
 package com.jdiscord;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import java.awt.BorderLayout;
+
 import org.jdesktop.swingx.prompt.PromptSupport;
 
 /**

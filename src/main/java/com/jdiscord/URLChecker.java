@@ -1,6 +1,7 @@
 package com.jdiscord;
 
-import java.net.*;
+import java.net.URI;
+import java.net.URL;
 
 /**
  * Utility class for URL validation.

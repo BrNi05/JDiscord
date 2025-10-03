@@ -2,6 +2,7 @@ package com.jdiscord;
 
 import javax.swing.UIManager;
 import javax.swing.SwingUtilities;
+
 import com.formdev.flatlaf.FlatDarkLaf;
 
 /**

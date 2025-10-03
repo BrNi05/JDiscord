@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Maven Clean",
+            "type": "shell",
+            "command": "mvn clean",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Maven Compile",
+            "type": "shell",
+            "command": "mvn compile",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Maven Run",
+            "type": "shell",
+            "command": "mvn exec:java",
+            "group": "build",
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean + Compile + Run",
+            "type": "shell",
+            "command": "mvn clean compile exec:java",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate Docs",
+            "type": "shell",
+            "command": "powershell -Command \"mvn javadoc:javadoc; Start-Process 'target/reports/apidocs/index.html'\"",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        }
+    ]
+}

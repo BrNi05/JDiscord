@@ -3,6 +3,7 @@
 
 # Maven
 *lst
+target/
 
 # Log file
 *.log

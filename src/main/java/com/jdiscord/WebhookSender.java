@@ -2,8 +2,6 @@ package com.jdiscord;
 
 import java.io.File;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.io.IOException;
 
 import java.net.HttpURLConnection;
@@ -23,11 +21,22 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 /**
  * A class for sending messages and files using a Discord webhook.
  */
 public class WebhookSender {
+    // The webhook URL
     private URL webhookUrl;
+
+    // OkHttpClient instance for file uploads
+    private final OkHttpClient client = new OkHttpClient();
 
     /**
      * Constructor for WebhookSender.
@@ -58,7 +67,7 @@ public class WebhookSender {
     public void sendMessage(Message message) {
         String payload = buildPayload(message);
         try {
-            postJson(payload);
+            postMessage(payload);
         } catch (IOException e) {
             ErrorDialog.showError(null, "Failed to send message");
         }
@@ -71,9 +80,7 @@ public class WebhookSender {
     public void sendFile(FileMessage fileMessage) {
         String payload = buildFilePayload(fileMessage);
         File targetFile = new File(fileMessage.getFilepath());
-        try { postMultipart(targetFile, payload); } catch (IOException e) {
-            ErrorDialog.showError(null, "Failed to send file");
-        }
+        postFile(targetFile, payload);
     }
 
     /**
@@ -124,7 +131,7 @@ public class WebhookSender {
 
         // Fields
         List<Field> fields = msg.getFields();
-        if (fields != null && !fields.isEmpty()) {
+        if (fields.isEmpty()) {
             JsonArray fieldsArray = new JsonArray();
             for (Field f : fields) {
                 JsonObject field = new JsonObject();
@@ -172,7 +179,7 @@ public class WebhookSender {
      * @param json The JSON payload as a string.
      * @throws IOException if an I/O error occurs.
      */
-    private void postJson(String json) throws IOException {
+    private void postMessage(String json) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) webhookUrl.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
@@ -187,45 +194,38 @@ public class WebhookSender {
     }
 
     /**
-     * POST multipart/form-data to the webhook URL
+     * POST a file using OkHttp3
      * @param file The file to upload.
      * @param payload The JSON payload as a string.
-     * @throws IOException if an I/O error occurs.
      */
-    private void postMultipart(File file, String payload) throws IOException {
-        String boundary = "----JDiscordBoundary" + System.currentTimeMillis();
-        HttpURLConnection conn = (HttpURLConnection) webhookUrl.openConnection();
-        conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
-
-        try (OutputStream os = conn.getOutputStream();
-             PrintWriter writer = new PrintWriter(new OutputStreamWriter(os, "UTF-8"), true)) {
-
-            // Payload
-            writer.append("--").append(boundary).append("\r\n");
-            writer.append("Content-Disposition: form-data; name=\"payload_json\"\r\n");
-            writer.append("Content-Type: application/json; charset=UTF-8\r\n\r\n");
-            writer.append(payload).append("\r\n");
-            writer.flush();
-
-            // File fields
-            writer.append("--").append(boundary).append("\r\n");
-            writer.append("Content-Disposition: form-data; name=\"file\"; filename=\"")
-                    .append(file.getName()).append("\"\r\n");
-            writer.append("Content-Type: ").append(Files.probeContentType(file.toPath())).append("\r\n\r\n");
-            writer.flush();
-
-            Files.copy(file.toPath(), os);
-            os.flush();
-
-            writer.append("\r\n--").append(boundary).append("--\r\n");
-            writer.flush();
+    public void postFile(File file, String payload) {
+        MediaType fileType = MediaType.parse("application/octet-stream");
+        try {
+            MediaType.parse(Files.probeContentType(file.toPath()));
         } catch (IOException e) {
-            ErrorDialog.showError(null, "JDiscord: Failed to send file: " + e.getMessage());
+            /* Swallow the error */
         }
 
-        int code = conn.getResponseCode();
-        if (400 <= code && code < 600) ErrorDialog.showError(null, "JDiscord: Discord API error: " + code);
+        // Request body
+        RequestBody body = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("payload_json", null,
+                        RequestBody.create(payload, MediaType.parse("application/json; charset=utf-8")))
+                .addFormDataPart("file", file.getName(),
+                        RequestBody.create(file, fileType))
+                .build();
+
+        // Request
+        Request request = new Request.Builder()
+            .url(webhookUrl)
+            .post(body)
+            .build();
+
+        // Execute
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException(String.valueOf(response.code()));
+        } catch (IOException e) {
+            ErrorDialog.showError(null, "JDiscord: Discord API error: " + e.getMessage());
+        }
     }
 }

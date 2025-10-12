@@ -13,17 +13,17 @@ import org.jdesktop.swingx.prompt.PromptSupport;
  */
 public class InputField {
     private JPanel panel;
-    private JTextField inputField;
+    private JTextField textInputField;
 
     /**
      * Constructor for InputField.
      * @param placeholder The placeholder text to display when the field is empty.
      */ 
     public InputField(String placeholder) {
-        inputField = new JTextField(20);
-        PromptSupport.setPrompt(placeholder, inputField);
+        textInputField = new JTextField(20);
+        PromptSupport.setPrompt(placeholder, textInputField);
         panel = new JPanel(new BorderLayout());
-        panel.add(inputField, BorderLayout.CENTER);
+        panel.add(textInputField, BorderLayout.CENTER);
     }
 
     /**
@@ -39,7 +39,7 @@ public class InputField {
      * @return The text in the input field, or null if empty.
      */
     public String getValue() {
-        return inputField.getText().isEmpty() ? null : inputField.getText();
+        return textInputField.getText().isEmpty() ? null : textInputField.getText();
     }
 
     /**
@@ -47,6 +47,6 @@ public class InputField {
      * @param value The text to set in the input field.
      */
     public void setValue(String value) {
-        inputField.setText(value);
+        textInputField.setText(value);
     }
 }

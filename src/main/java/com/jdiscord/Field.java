@@ -2,6 +2,7 @@ package com.jdiscord;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
@@ -53,9 +54,9 @@ public class Field {
      */
     public static List<Field> parseDropdown(JComboBox <String> dropdown) {
         ComboBoxModel<String> model = dropdown.getModel();
-        List<Field> fields = new ArrayList<Field>();
+        List<Field> fields = new ArrayList<>();
 
-        if (model.getSize() == 1 && model.getElementAt(0).equals("No assigned fields")) return null;
+        if (model.getSize() == 1 && model.getElementAt(0).equals("No assigned fields")) return Collections.emptyList();
 
         for (int i = 0; i < model.getSize(); i++) {
             String item = model.getElementAt(i);

@@ -1,5 +1,7 @@
 package com.jdiscord;
 
+import java.util.logging.Logger;
+
 import javax.swing.UIManager;
 import javax.swing.SwingUtilities;
 
@@ -11,17 +13,17 @@ import com.formdev.flatlaf.FlatDarkLaf;
  */
 public class Main {
     public static void main(String[] args) {
+        final Logger logger = Logger.getLogger("Initialization");
+
         try {
             // Shortcut for a nice looking GUI
             UIManager.setLookAndFeel(new FlatDarkLaf());
         } catch (Exception e) {
-            System.out.println("JDiscord: Failed to initialize UI");
+            logger.warning("JDiscord: Failed to initialize UI");
             System.exit(1);
         }
 
         // Create the GUI on the AWT Event Dispatch Thread
-        SwingUtilities.invokeLater(() -> {
-            new JDiscordApp();
-        });
+        SwingUtilities.invokeLater(JDiscordApp::new);
     }
 }

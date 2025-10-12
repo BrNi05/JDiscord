@@ -16,7 +16,7 @@ public abstract class MessageBase {
      * @param text     The message content.
      * @throws IllegalArgumentException if one or more parameters are invalid.
      */
-    public MessageBase(String webhook, String username, String text) throws IllegalArgumentException {
+    protected MessageBase(String webhook, String username, String text) throws IllegalArgumentException {
         setWebhook(webhook);
         setUsername(username);
         setText(text);

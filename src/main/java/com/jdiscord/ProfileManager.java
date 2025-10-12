@@ -46,20 +46,28 @@ public class ProfileManager {
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     // Save directory
-    public static String SAVE_DIR = null;
+    private static String saveDir = null;
 
     // Loaded webhook
     private static String webhook = null;
+
+    // Consts
+    private static final String JSON_EXT = ".json";
 
     /**
      * Initialize save directory.
      */
     static {
-        SAVE_DIR = new File(System.getProperty("user.home"), "Documents/JDiscordProfiles").getAbsolutePath();
+        saveDir = new File(System.getProperty("user.home"), "Documents/JDiscordProfiles").getAbsolutePath();
 
-        File dir = new File(SAVE_DIR);
+        File dir = new File(saveDir);
         if (!dir.exists()) dir.mkdirs();
     }
+
+    /**
+     * Private constructor to prevent instantiation
+     */
+    private ProfileManager() {}
 
     /**
      * Get the currently loaded webhook URL.
@@ -141,7 +149,7 @@ public class ProfileManager {
         }
         data.filePath = filePathInput.getValue();
 
-        try (FileWriter writer = new FileWriter(new File(SAVE_DIR, profileName + ".json"))) {
+        try (FileWriter writer = new FileWriter(new File(saveDir, profileName + JSON_EXT))) {
             gson.toJson(data, writer);
         } catch (IOException e) {
             ErrorDialog.showError(null, "Failed to save profile: " + profileName);
@@ -186,7 +194,7 @@ public class ProfileManager {
         JComboBox <String> dropdown,
         InputField filePathInput
     ) {
-        try (FileReader reader = new FileReader(new File(SAVE_DIR, profileName + ".json"))) {
+        try (FileReader reader = new FileReader(new File(saveDir, profileName + JSON_EXT))) {
             ProfileData data = gson.fromJson(reader, ProfileData.class);
 
             webhook = data.webhook;
@@ -219,8 +227,8 @@ public class ProfileManager {
      * @return List of profile names.
      */
     public static List<String> listProfiles() {
-        File dir = new File(SAVE_DIR);
-        String[] files = dir.list((d, name) -> name.endsWith(".json"));
+        File dir = new File(saveDir);
+        String[] files = dir.list((d, name) -> name.endsWith(JSON_EXT));
         return files != null ? List.of(files).stream().map(f -> f.substring(0, f.length() - 5)).toList() : List.of();
     }
 }

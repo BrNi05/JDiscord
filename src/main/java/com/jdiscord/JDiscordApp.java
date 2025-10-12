@@ -7,12 +7,14 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JCheckBox;
 import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ComboBoxModel;
 import javax.swing.JColorChooser;
+import javax.swing.WindowConstants;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -20,6 +22,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.FlowLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.awt.Color;
 
 import org.jdesktop.swingx.prompt.PromptSupport;
@@ -35,12 +38,15 @@ public class JDiscordApp {
     private static final String DEFAULT_COLOR = "16777215"; // white
     private String pickedColor = DEFAULT_COLOR;
 
+    // Consts
+    private static final String NO_ASSIGNED_FIELDS = "No assigned fields";
+
     /**
      * Constructor to set up the GUI components and event listeners.
      */
     public JDiscordApp() {
         frame = new JFrame("JDiscord");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(900, 500);
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
@@ -128,7 +134,7 @@ public class JDiscordApp {
         rightPanel.add(imageUrlInput.getPanel(), row(gbcR, 0));
 
         JPanel dropdownPanel = new JPanel(new BorderLayout(5, 0));
-        JComboBox<String> dropdown = new JComboBox<>(new String[]{"No assigned fields"});
+        JComboBox<String> dropdown = new JComboBox<>(new String[]{NO_ASSIGNED_FIELDS});
         JButton deleteBtn = new JButton("Delete");
         dropdownPanel.add(dropdown, BorderLayout.CENTER);
         dropdownPanel.add(deleteBtn, BorderLayout.EAST);
@@ -165,7 +171,11 @@ public class JDiscordApp {
         rightPanel.add(authorGroup, row(gbcR, 3));
 
         InputField filePathInput = new InputField("File to send path (max 8 MB)");
-        rightPanel.add(filePathInput.getPanel(), row(gbcR, 4));
+        JButton browseButton = new JButton("Browse");
+        JPanel filePanel = new JPanel(new BorderLayout(5, 0));
+        filePanel.add(filePathInput.getPanel(), BorderLayout.CENTER);
+        filePanel.add(browseButton, BorderLayout.EAST);
+        rightPanel.add(filePanel, row(gbcR, 4));
 
         // Split the main UI
         mainCenter.add(new JScrollPane(leftPanel));
@@ -205,6 +215,18 @@ public class JDiscordApp {
             }
         });
 
+        // File browser button event listener
+        browseButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Select a file to send");
+            
+            int result = fileChooser.showOpenDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                filePathInput.setValue(selectedFile.getAbsolutePath());
+            }
+        });
+
         // Send button event listener
         // Errors handled in sendMessage and sendFileMessage methods
         sendButton.addActionListener(event -> {
@@ -240,7 +262,7 @@ public class JDiscordApp {
         // Dropdown delete button event listener
         deleteBtn.addActionListener(event -> {
             ComboBoxModel<String> model = dropdown.getModel();
-            if (model.getSize() == 1 && model.getElementAt(0).equals("No assigned fields")) return;
+            if (model.getSize() == 1 && model.getElementAt(0).equals(NO_ASSIGNED_FIELDS)) return;
 
             int selectedIndex = dropdown.getSelectedIndex();
             if (selectedIndex != -1) {
@@ -251,7 +273,7 @@ public class JDiscordApp {
                     }
                 }
                 if (newModel.getSize() == 0) {
-                    newModel.addElement("No assigned fields");
+                    newModel.addElement(NO_ASSIGNED_FIELDS);
                 }
                 dropdown.setModel(newModel);
             }
@@ -269,7 +291,7 @@ public class JDiscordApp {
             ComboBoxModel<String> model = dropdown.getModel();
             DefaultComboBoxModel<String> newModel = new DefaultComboBoxModel<>();
             for (int i = 0; i < model.getSize(); i++) {
-                if (!model.getElementAt(i).equals("No assigned fields")) {
+                if (!model.getElementAt(i).equals(NO_ASSIGNED_FIELDS)) {
                     newModel.addElement(model.getElementAt(i));
                 }
             }

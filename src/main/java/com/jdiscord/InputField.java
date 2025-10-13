@@ -9,7 +9,7 @@ import org.jdesktop.swingx.prompt.PromptSupport;
 
 /**
  * A simple input field with a placeholder.
- * A JPanel is used for layout purposes.
+ * A JPanel is used for layout purposes, as JTextField is not a Component.
  */
 public class InputField {
     private JPanel panel;

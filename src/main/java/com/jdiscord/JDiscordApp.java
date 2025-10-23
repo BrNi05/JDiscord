@@ -294,12 +294,21 @@ public class JDiscordApp {
             }
 
             ComboBoxModel<String> model = dropdown.getModel();
+
+            // Max. 25 fields
+            if (model.getSize() >= 25) {
+                ErrorDialog.showError(frame, "Max. number of fields (25) reached.");
+                return;
+            }
+
+            // Construct new model
             DefaultComboBoxModel<String> newModel = new DefaultComboBoxModel<>();
             for (int i = 0; i < model.getSize(); i++) {
                 if (!model.getElementAt(i).equals(NO_ASSIGNED_FIELDS)) {
                     newModel.addElement(model.getElementAt(i));
                 }
             }
+
             newModel.addElement(key + ":" + value);
             dropdown.setModel(newModel);
 

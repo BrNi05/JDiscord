@@ -33,6 +33,31 @@
             "problemMatcher": []
         },
         {
+            "label": "Maven Test",
+            "type": "shell",
+            "command": "mvn test",
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "Maven Test + Covg",
+            "type": "shell",
+            "command": "mvn clean verify",
+            "group": "test",
+            "problemMatcher": []
+        },
+        {
+            "label": "Open JaCoCo report",
+            "type": "shell",
+            "command": "start \"\" \"${workspaceFolder}/target/site/jacoco/index.html\"",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "Generate Docs",
             "type": "shell",
             "command": "powershell -Command \"mvn javadoc:javadoc; Start-Process 'target/reports/apidocs/index.html'\"",

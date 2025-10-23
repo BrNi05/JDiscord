@@ -231,4 +231,29 @@ public class ProfileManager {
         String[] files = dir.list((d, name) -> name.endsWith(JSON_EXT));
         return files != null ? List.of(files).stream().map(f -> f.substring(0, f.length() - 5)).toList() : List.of();
     }
+
+    /**
+     * Delete a saved profile.
+     * @param profileName Profile name (without .json extension).
+     */
+    public static void deleteProfile(String profileName) {
+        File file = new File(saveDir, profileName + JSON_EXT);
+        if (file.exists()) {
+            if (!file.delete()) {
+                ErrorDialog.showError(null, "Failed to delete profile: " + profileName);
+            }
+        } else {
+            ErrorDialog.showError(null, "Profile not found: " + profileName);
+        }
+    }
+
+    /**
+     * Set the save directory (for testing purposes).
+     * @param dirPath Directory path.
+     */
+    public static void setSaveDir(String dirPath) {
+        saveDir = dirPath;
+        File dir = new File(saveDir);
+        if (!dir.exists()) dir.mkdirs();
+    }
 }

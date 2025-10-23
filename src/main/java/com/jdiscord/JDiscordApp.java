@@ -35,11 +35,12 @@ public class JDiscordApp {
     private JFrame frame;
 
     // Color picker result
-    private static final String DEFAULT_COLOR = "16777215"; // white
+    private static final String DEFAULT_COLOR = "5132370"; // Flatlaf grey for button
     private String pickedColor = DEFAULT_COLOR;
 
     // Consts
     private static final String NO_ASSIGNED_FIELDS = "No assigned fields";
+    private static final String NO_PROFILE = "No saved profiles";
 
     /**
      * Constructor to set up the GUI components and event listeners.
@@ -65,12 +66,16 @@ public class JDiscordApp {
         PromptSupport.setPrompt("Profile name", profileField);
         JButton saveProfileButton = new JButton("Save Profile");
 
-        JComboBox<String> profileDropdown = new JComboBox<>(new String[]{"No saved profiles"});
+        JComboBox<String> profileDropdown = new JComboBox<>(new String[]{NO_PROFILE});
         populateProfilesDropdown(profileDropdown);
+        profileDropdown.setSelectedIndex(0);
+
+        JButton deleteProfileButton = new JButton("Delete Profile");
 
         leftMenu.add(profileField);
         leftMenu.add(saveProfileButton);
         leftMenu.add(profileDropdown);
+        leftMenu.add(deleteProfileButton);
 
         // Menu bar: right side
         rightMenu.setLayout(new FlowLayout(FlowLayout.RIGHT));
@@ -88,7 +93,7 @@ public class JDiscordApp {
 
         // Main UI: left panel
         JPanel leftPanel = new JPanel(new GridBagLayout());
-        leftPanel.setBorder(BorderFactory.createTitledBorder("Message Content"));
+        leftPanel.setBorder(BorderFactory.createTitledBorder("Message Basics"));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -113,7 +118,7 @@ public class JDiscordApp {
         InputField titleInput = new InputField("Title Text");
         titleGroup.add(titleInput.getPanel());
         
-        InputField titleUrlInput = new InputField("Title Link");
+        InputField titleUrlInput = new InputField("Title URL");
         titleGroup.add(titleUrlInput.getPanel());
         
         leftPanel.add(titleGroup, row(gbc, 4));
@@ -170,7 +175,7 @@ public class JDiscordApp {
     
         rightPanel.add(authorGroup, row(gbcR, 3));
 
-        InputField filePathInput = new InputField("File to send path (max 8 MB)");
+        InputField filePathInput = new InputField("File to send (max 8 MB)");
         JButton browseButton = new JButton("Browse");
         JPanel filePanel = new JPanel(new BorderLayout(5, 0));
         filePanel.add(filePathInput.getPanel(), BorderLayout.CENTER);
@@ -331,6 +336,9 @@ public class JDiscordApp {
 
         // Load profile dropdown event listener
         profileDropdown.addActionListener(event -> {
+            // Do not load if there are no profiles
+            if (profileDropdown.getSelectedItem().equals(NO_PROFILE)) return;
+
             pickedColor = ProfileManager.loadProfile(
                 (String) profileDropdown.getSelectedItem(),
                 usernameInput,
@@ -350,8 +358,28 @@ public class JDiscordApp {
                 filePathInput
             );
             if (pickedColor == null) pickedColor = DEFAULT_COLOR;
+            colorPicker.setBackground(new Color(Integer.parseInt(pickedColor)));
 
             webhookInput.setValue(ProfileManager.getWebhook());
+            profileField.setText((String) profileDropdown.getSelectedItem());
+        });
+
+        // Delete profile button event listener
+        deleteProfileButton.addActionListener(event -> {
+            // Do not delete if there are no profiles
+            if (profileDropdown.getSelectedItem().equals(NO_PROFILE)) return;
+
+            ProfileManager.deleteProfile((String) profileDropdown.getSelectedItem());
+
+            populateProfilesDropdown(profileDropdown);
+            
+            // Set the profile input field
+            if ((String) profileDropdown.getSelectedItem() != NO_PROFILE) {
+                profileDropdown.setSelectedIndex(0);
+                profileField.setText((String) profileDropdown.getSelectedItem());
+            } else {
+                profileField.setText("");
+            }
         });
 
         frame.setVisible(true);
@@ -363,14 +391,17 @@ public class JDiscordApp {
      */
     private static void populateProfilesDropdown(JComboBox<String> profileDropdown) {
         List<String> profiles = ProfileManager.listProfiles();
+        DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+
         if (!profiles.isEmpty()) {
-            DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
             for (String profile : profiles) {
                 model.addElement(profile);
             }
-            profileDropdown.setModel(model);
-            profileDropdown.setSelectedIndex(0);
+        } else {
+            model.addElement(NO_PROFILE);
         }
+
+        profileDropdown.setModel(model);
     }
 
     /**

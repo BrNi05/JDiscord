@@ -131,7 +131,7 @@ public class WebhookSender {
 
         // Fields
         List<Field> fields = msg.getFields();
-        if (fields.isEmpty()) {
+        if (!fields.isEmpty()) {
             JsonArray fieldsArray = new JsonArray();
             for (Field f : fields) {
                 JsonObject field = new JsonObject();

@@ -31,3 +31,6 @@ replay_pid*
 javadoc-bundle-options
 *apidocs/
 maven-javadoc-plugin-stale-data.txt
+
+# Markdown PDF export
+*.pdf

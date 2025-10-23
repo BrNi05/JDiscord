@@ -183,7 +183,7 @@ public class Message extends MessageBase {
      * @param avatarIconUrl The avatar icon URL (optional).
      * @throws IllegalArgumentException if the URL is invalid.
      */
-    private void setAvatarIconUrl(String avatarIconUrl) throws IllegalArgumentException {
+    public void setAvatarIconUrl(String avatarIconUrl) throws IllegalArgumentException {
         if (avatarIconUrl == null) return;
 
         if (URLChecker.isValid(avatarIconUrl)) {

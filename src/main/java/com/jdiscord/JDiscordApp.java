@@ -309,8 +309,13 @@ public class JDiscordApp {
         
         // Save profile button event listener
         saveProfileButton.addActionListener(event -> {
+            // Set the profile input field
+            profileField.setText(
+                profileField.getText().trim().isEmpty() ? "default" : profileField.getText().trim()
+            );
+
             ProfileManager.saveProfile(
-                profileField.getText().trim().isEmpty() ? "default" : profileField.getText().trim(),
+                profileField.getText(),
                 webhookInput.getValue() == null ? "" : webhookInput.getValue(),
                 usernameInput,
                 avatarIconUrlInput,

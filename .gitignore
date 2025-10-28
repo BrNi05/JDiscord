@@ -34,3 +34,7 @@ maven-javadoc-plugin-stale-data.txt
 
 # Markdown PDF export
 *.pdf
+
+# Submission files
+*.md
+!README.md

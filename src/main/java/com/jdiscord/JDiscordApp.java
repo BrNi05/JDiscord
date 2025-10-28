@@ -2,6 +2,9 @@ package com.jdiscord;
 
 import java.util.List;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import javax.swing.JTextField;
@@ -22,7 +25,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.FlowLayout;
 import java.awt.Insets;
-import java.io.File;
 import java.awt.Color;
 
 import org.jdesktop.swingx.prompt.PromptSupport;
@@ -289,7 +291,7 @@ public class JDiscordApp {
             String key = keyInput.getText().trim();
             String value = valueInput.getText().trim();
             if (key.isEmpty() || value.isEmpty()) {
-                ErrorDialog.showError(frame, "Provide a key and a value");
+                ErrorDialog.showError(frame, "Provide a key and a value.");
                 return;
             }
 
@@ -323,26 +325,31 @@ public class JDiscordApp {
                 profileField.getText().trim().isEmpty() ? "default" : profileField.getText().trim()
             );
 
-            ProfileManager.saveProfile(
-                profileField.getText(),
-                webhookInput.getValue() == null ? "" : webhookInput.getValue(),
-                usernameInput,
-                avatarIconUrlInput,
-                msgInput,
-                titleInput,
-                descInput,
-                pickedColor,
-                titleUrlInput,
-                authorInput,
-                authorUrlInput,
-                authorIconInput,
-                imageUrlInput,
-                footerTextInput,
-                footerIconInput,
-                timestampCheckbox,
-                dropdown,
-                filePathInput
-            );
+            try {
+                ProfileManager.saveProfile(
+                    profileField.getText(),
+                    webhookInput.getValue() == null ? "" : webhookInput.getValue(),
+                    usernameInput,
+                    avatarIconUrlInput,
+                    msgInput,
+                    titleInput,
+                    descInput,
+                    pickedColor,
+                    titleUrlInput,
+                    authorInput,
+                    authorUrlInput,
+                    authorIconInput,
+                    imageUrlInput,
+                    footerTextInput,
+                    footerIconInput,
+                    timestampCheckbox,
+                    dropdown,
+                    filePathInput
+                );
+            } catch (IOException e) {
+                ErrorDialog.showError(null, "Failed to save profile: " + profileField.getText());
+                return;
+            }
 
             // Repopulate profiles dropdown
             populateProfilesDropdown(profileDropdown);
@@ -353,24 +360,30 @@ public class JDiscordApp {
             // Do not load if there are no profiles
             if (profileDropdown.getSelectedItem().equals(NO_PROFILE)) return;
 
-            pickedColor = ProfileManager.loadProfile(
-                (String) profileDropdown.getSelectedItem(),
-                usernameInput,
-                avatarIconUrlInput,
-                msgInput,
-                titleInput,
-                descInput,
-                titleUrlInput,
-                authorInput,
-                authorUrlInput,
-                authorIconInput,
-                imageUrlInput,
-                footerTextInput,
-                footerIconInput,
-                timestampCheckbox,
-                dropdown,
-                filePathInput
-            );
+            try {
+                pickedColor = ProfileManager.loadProfile(
+                    (String) profileDropdown.getSelectedItem(),
+                    usernameInput,
+                    avatarIconUrlInput,
+                    msgInput,
+                    titleInput,
+                    descInput,
+                    titleUrlInput,
+                    authorInput,
+                    authorUrlInput,
+                    authorIconInput,
+                    imageUrlInput,
+                    footerTextInput,
+                    footerIconInput,
+                    timestampCheckbox,
+                    dropdown,
+                    filePathInput
+                );
+            } catch (IOException e) {
+                ErrorDialog.showError(null, "Failed to load profile: " + profileDropdown.getSelectedItem());
+                return;
+            }
+
             if (pickedColor == null) pickedColor = DEFAULT_COLOR;
             colorPicker.setBackground(new Color(Integer.parseInt(pickedColor)));
 
@@ -383,12 +396,17 @@ public class JDiscordApp {
             // Do not delete if there are no profiles
             if (profileDropdown.getSelectedItem().equals(NO_PROFILE)) return;
 
-            ProfileManager.deleteProfile((String) profileDropdown.getSelectedItem());
+            try {
+                ProfileManager.deleteProfile((String) profileDropdown.getSelectedItem());
+            } catch (IOException e) {
+                ErrorDialog.showError(null, e.getMessage());
+                return;
+            }
 
             populateProfilesDropdown(profileDropdown);
             
             // Set the profile input field
-            if ((String) profileDropdown.getSelectedItem() != NO_PROFILE) {
+            if (!((String) profileDropdown.getSelectedItem()).equals(NO_PROFILE)) {
                 profileDropdown.setSelectedIndex(0);
                 profileField.setText((String) profileDropdown.getSelectedItem());
             } else {
@@ -402,6 +420,7 @@ public class JDiscordApp {
     /**
      * Populate the profiles dropdown with saved profiles.
      * If no profiles are saved, display "No saved profiles".
+     * @param profileDropdown The JComboBox to populate.
      */
     private static void populateProfilesDropdown(JComboBox<String> profileDropdown) {
         List<String> profiles = ProfileManager.listProfiles();
@@ -482,6 +501,10 @@ public class JDiscordApp {
             sender.sendMessage(message);
         } catch (IllegalArgumentException e) {
             ErrorDialog.showError(null, e.getMessage());
+        } catch (IOException e) {
+            ErrorDialog.showError(null, "Failed to send message - network error.");
+        } catch (DiscordApiException e) {
+            ErrorDialog.showError(null, e.getMessage());
         }
     }
 
@@ -508,9 +531,11 @@ public class JDiscordApp {
                 filePathInput.getValue()
             );
             sender.sendFile(fileMessage);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | DiscordApiException e) {
             ErrorDialog.showError(null, e.getMessage());
-        }
+        } catch (IOException e) {
+            ErrorDialog.showError(null, "Failed to send file: " + e.getMessage());
+        } 
     }
 
     /**

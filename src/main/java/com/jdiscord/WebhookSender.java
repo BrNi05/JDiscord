@@ -3,14 +3,13 @@ package com.jdiscord;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 import java.net.URISyntaxException;
 import java.net.MalformedURLException;
-
-import java.nio.file.Files;
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -63,21 +62,21 @@ public class WebhookSender {
     /**
      * Send a message using the webhook.
      * @param message The message to send.
+     * @throws IOException if an I/O error occurs.
+     * @throws DiscordApiException if the Discord API returns an error code.
      */
-    public void sendMessage(Message message) {
+    public void sendMessage(Message message) throws IOException, DiscordApiException {
         String payload = buildPayload(message);
-        try {
-            postMessage(payload);
-        } catch (IOException e) {
-            ErrorDialog.showError(null, "Failed to send message");
-        }
+        postMessage(payload);
     }
 
     /**
      * Send a file using the webhook.
      * @param fileMessage The file message to send.
+     * @throws IOException if an I/O error occurs.
+     * @throws DiscordApiException if the Discord API returns an error code.
      */
-    public void sendFile(FileMessage fileMessage) {
+    public void sendFile(FileMessage fileMessage) throws IOException, DiscordApiException {
         String payload = buildFilePayload(fileMessage);
         File targetFile = new File(fileMessage.getFilepath());
         postFile(targetFile, payload);
@@ -178,8 +177,9 @@ public class WebhookSender {
      * POST JSON payload to the webhook URL
      * @param json The JSON payload as a string.
      * @throws IOException if an I/O error occurs.
+     * @throws DiscordApiException if the Discord API returns an error code.
      */
-    private void postMessage(String json) throws IOException {
+    private void postMessage(String json) throws IOException, DiscordApiException {
         HttpURLConnection conn = (HttpURLConnection) webhookUrl.openConnection();
         conn.setDoOutput(true);
         conn.setRequestMethod("POST");
@@ -190,30 +190,34 @@ public class WebhookSender {
         }
 
         int code = conn.getResponseCode();
-        if (400 <= code && code < 600) ErrorDialog.showError(null, "JDiscord: Discord API error: " + code);
+
+        if (code == 400) throw new DiscordApiException(code, "invalid request. Refer to JDiscord documentation");
+        else if (code > 400 && code < 600) throw new DiscordApiException(code, "error during message send");
     }
 
     /**
      * POST a file using OkHttp3
      * @param file The file to upload.
      * @param payload The JSON payload as a string.
+     * @throws IOException if an I/O error occurs (during file type check).
+     * @throws DiscordApiException if the Discord API returns an error code.
      */
-    public void postFile(File file, String payload) {
+    public void postFile(File file, String payload) throws IOException, DiscordApiException {
         MediaType fileType = MediaType.parse("application/octet-stream");
         try {
             MediaType.parse(Files.probeContentType(file.toPath()));
         } catch (IOException e) {
-            /* Swallow the error */
+            throw new IOException("Failed to determine file type.");
         }
 
         // Request body
         RequestBody body = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("payload_json", null,
-                        RequestBody.create(payload, MediaType.parse("application/json; charset=utf-8")))
-                .addFormDataPart("file", file.getName(),
-                        RequestBody.create(file, fileType))
-                .build();
+            .setType(MultipartBody.FORM)
+            .addFormDataPart("payload_json", null,
+                RequestBody.create(payload, MediaType.parse("application/json; charset=utf-8")))
+            .addFormDataPart("file", file.getName(),
+                RequestBody.create(file, fileType))
+            .build();
 
         // Request
         Request request = new Request.Builder()
@@ -223,9 +227,7 @@ public class WebhookSender {
 
         // Execute
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException(String.valueOf(response.code()));
-        } catch (IOException e) {
-            ErrorDialog.showError(null, "JDiscord: Discord API error: " + e.getMessage());
+            if (!response.isSuccessful()) throw new DiscordApiException(response.code(), "error during file upload");
         }
     }
 }

@@ -47,7 +47,7 @@ public class FileMessage extends MessageBase {
         }
 
         // Max file size: 8MB (Discord API limit)
-        long maxSize = 8 * 1000 * 1000L;
+        long maxSize = 8 * 1000 * 1000L; // Discord API assumes 8MB = 8.000.000 bytes
         if (file.length() > maxSize) {
             throw new IllegalArgumentException("File size exceeds 8MB");
         }

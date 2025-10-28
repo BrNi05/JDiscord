@@ -78,5 +78,13 @@ class MessageTest {
         assertThrows(IllegalArgumentException.class, () -> msg.setAuthorIconUrl("invalid-url"));
         assertThrows(IllegalArgumentException.class, () -> msg.setImageUrl("invalid-url"));
         assertThrows(IllegalArgumentException.class, () -> msg.setFooterIconUrl("invalid-url"));
+
+        // setFields with more than 25 fields
+        List<Field> tooManyFields = new ArrayList<>();
+        for (int i = 0; i < 26; i++) {
+            tooManyFields.add(new Field("key" + i, "value" + i));
+        }
+
+        assertThrows(IllegalArgumentException.class, () -> msg.setFields(tooManyFields));
     }
 }

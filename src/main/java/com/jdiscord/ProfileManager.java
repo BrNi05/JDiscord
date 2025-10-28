@@ -105,6 +105,7 @@ public class ProfileManager {
      * @param timestampCheckbox Timestamp checkbox.
      * @param dropdown Dropdown component for fields.
      * @param filePathInput File path input field.
+     * @throws IOException if an I/O error occurs during save.
      */
     public static void saveProfile(
         String profileName,
@@ -125,7 +126,7 @@ public class ProfileManager {
         JCheckBox timestampCheckbox,
         JComboBox <String> dropdown,
         InputField filePathInput
-    ) {
+    ) throws IOException {
         ProfileData data = new ProfileData();
         data.webhook = webhook;
         data.username = usernameInput.getValue();
@@ -151,8 +152,6 @@ public class ProfileManager {
 
         try (FileWriter writer = new FileWriter(new File(saveDir, profileName + JSON_EXT))) {
             gson.toJson(data, writer);
-        } catch (IOException e) {
-            ErrorDialog.showError(null, "Failed to save profile: " + profileName);
         }
     }
 
@@ -175,6 +174,7 @@ public class ProfileManager {
      * @param dropdown Dropdown component for fields.
      * @param filePathInput File path input field.
      * @return Picked color in decimal string format, or null if loading failed.
+     * @throws IOException if an I/O error occurs during load.
      */
     public static String loadProfile(
         String profileName,
@@ -193,7 +193,7 @@ public class ProfileManager {
         JCheckBox timestampCheckbox,
         JComboBox <String> dropdown,
         InputField filePathInput
-    ) {
+    ) throws IOException {
         try (FileReader reader = new FileReader(new File(saveDir, profileName + JSON_EXT))) {
             ProfileData data = gson.fromJson(reader, ProfileData.class);
 
@@ -216,9 +216,6 @@ public class ProfileManager {
             filePathInput.setValue(data.filePath);
 
             return data.pickedColor;
-        } catch (IOException e) {
-            ErrorDialog.showError(null, "Failed to load profile: " + profileName);
-            return null;
         }
     }
 
@@ -235,16 +232,13 @@ public class ProfileManager {
     /**
      * Delete a saved profile.
      * @param profileName Profile name (without .json extension).
+     * @throws IOException if an I/O error occurs during deletion.
      */
-    public static void deleteProfile(String profileName) {
+    public static void deleteProfile(String profileName) throws IOException {
         File file = new File(saveDir, profileName + JSON_EXT);
         if (file.exists()) {
-            if (!file.delete()) {
-                ErrorDialog.showError(null, "Failed to delete profile: " + profileName);
-            }
-        } else {
-            ErrorDialog.showError(null, "Profile not found: " + profileName);
-        }
+            if (!file.delete()) throw new IOException("Failed to delete profile: " + profileName);
+        } else throw new IOException("Profile not found: " + profileName);
     }
 
     /**
@@ -253,7 +247,5 @@ public class ProfileManager {
      */
     public static void setSaveDir(String dirPath) {
         saveDir = dirPath;
-        File dir = new File(saveDir);
-        if (!dir.exists()) dir.mkdirs();
     }
 }

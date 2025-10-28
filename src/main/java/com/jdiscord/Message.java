@@ -309,8 +309,14 @@ public class Message extends MessageBase {
     /**
      * Set the list of embed fields.
      * @param fields The list of embed fields.
+     * @throws IllegalArgumentException if more than 25 fields are provided.
      */
-    public void setFields(List<Field> fields) {
+    public void setFields(List<Field> fields) throws IllegalArgumentException {
+        if (fields != null && fields.size() > 25) {
+            // Checked at UI as well, could be useful for later CLI use
+            throw new IllegalArgumentException("A maximum of 25 fields are allowed");
+        }
+
         this.fields = fields;
     }
 

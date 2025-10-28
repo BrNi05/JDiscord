@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.lang.reflect.Method;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.nio.file.Path;
@@ -57,7 +59,7 @@ class WebhookSenderTest {
             true
         );
 
-        var method = WebhookSender.class.getDeclaredMethod("buildPayload", Message.class);
+        Method method = WebhookSender.class.getDeclaredMethod("buildPayload", Message.class);
         method.setAccessible(true);
         String json = (String) method.invoke(sender, msg);
 
@@ -91,5 +93,52 @@ class WebhookSenderTest {
         assertNotNull(json);
         assertTrue(json.contains("Text"));
         assertTrue(json.contains("username"));
+    }
+
+    // Test send message process
+    // Expect an exception due to invalid webhook URL (or no network)
+    @Test
+    void sendMessageInvalidWebhook() throws Exception {
+        String validWebhook = "https://discord.com/api/webhooks/123/abc";
+        WebhookSender sender = new WebhookSender(validWebhook);
+
+        Message msg = new Message(
+            validWebhook,
+            "username",
+            null,
+            null,
+            "Title",
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            List.of(),
+            null,
+            null,
+            true
+        );
+
+        assertThrows(Exception.class, () -> sender.sendMessage(msg));
+    }
+
+    // Test send file message process
+    // Expect an exception due to invalid webhook URL (or no network)
+    @Test
+    void sendFileInvalidWebhook() throws Exception {
+        String validWebhook = "https://discord.com/api/webhooks/123/abc";
+        WebhookSender sender = new WebhookSender(validWebhook);
+
+        // Mimic an existing file in tempDir
+        File tempFile = tempDir.resolve("test.txt").toFile();
+        try (FileWriter writer = new FileWriter(tempFile)) {
+            writer.write("test");
+        }
+
+        FileMessage fm = new FileMessage(validWebhook, "username", "Text", tempFile.getAbsolutePath());
+
+        assertThrows(Exception.class, () -> sender.sendFile(fm));
     }
 }

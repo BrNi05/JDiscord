@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -40,13 +41,28 @@ class ProfileManagerTest {
         filePath.setValue("/tmp/file.txt");
 
         // Save profile
-        ProfileManager.saveProfile("p1", "https://discord.com/api/webhooks/abc123",
+        try {
+            ProfileManager.saveProfile("p1", "https://discord.com/api/webhooks/abc123",
             username, avatar, msg, title, desc, "123", titleUrl, author, authorUrl,
             authorIcon, imageUrl, footerText, footerIcon, timestamp, dropdown, filePath);
+        } catch (IOException e) {
+            fail("IOException thrown during saveProfile: " + e.getMessage());
+        }
 
         // List profiles
         List<String> profiles = ProfileManager.listProfiles();
         assertTrue(profiles.contains("p1"));
+
+        // Exception test: saveProfile(...) throws when saving triggers an IO error
+        ProfileManager.setSaveDir("does_not_exists"); // mimick an error
+        assertThrows(IOException.class, () -> {
+            ProfileManager.saveProfile("p2", "https://discord.com/api/webhooks/abc123",
+                username, avatar, msg, title, desc, "123", titleUrl, author, authorUrl,
+                authorIcon, imageUrl, footerText, footerIcon, timestamp, dropdown, filePath);
+        });
+        
+        // Restore valid save dir
+        ProfileManager.setSaveDir(tempDir.toFile().getAbsolutePath());
 
         // Load profile
         InputField username2 = new InputField("");
@@ -56,9 +72,14 @@ class ProfileManagerTest {
         JComboBox<String> dropdown2 = new JComboBox<>();
         InputField filePath2 = new InputField("");
 
-        String color = ProfileManager.loadProfile("p1",
+        String color = null;
+        try {
+            color = ProfileManager.loadProfile("p1",
             username2, avatar2, msg2, title, desc, titleUrl, author, authorUrl,
             authorIcon, imageUrl, footerText, footerIcon, timestamp2, dropdown2, filePath2);
+        } catch (IOException e) {
+            fail("IOException thrown during loadProfile: " + e.getMessage());
+        }
 
         assertEquals("user1", username2.getValue());
         assertEquals("Hello", msg2.getValue());
@@ -68,7 +89,11 @@ class ProfileManagerTest {
         assertEquals("/tmp/file.txt", filePath2.getValue());
         assertEquals("123", color);
 
-        ProfileManager.deleteProfile("p1");
+        try {
+            ProfileManager.deleteProfile("p1");
+        } catch (IOException e) {
+            fail("IOException thrown during deleteProfile: " + e.getMessage());
+        }
         assertFalse(ProfileManager.listProfiles().contains("p1"));
     }
 
@@ -76,5 +101,13 @@ class ProfileManagerTest {
     void setGetWebhook() {
         ProfileManager.setWebhook("https://discord.com/api/webhooks/abc123");
         assertEquals("https://discord.com/api/webhooks/abc123", ProfileManager.getWebhook());
+    }
+
+    // Exception test for deleteProfile when profile does not exist
+    @Test
+    void deleteProfileNonExistentThrows() {
+        assertThrows(IOException.class, () -> {
+            ProfileManager.deleteProfile("non_existent_profile");
+        });
     }
 }

@@ -197,7 +197,7 @@ public class WebhookSender {
 
     /**
      * POST a file using OkHttp3
-     * @param file The file to upload.
+     * @param file    The file to upload.
      * @param payload The JSON payload as a string.
      * @throws IOException if an I/O error occurs (during file type check).
      * @throws DiscordApiException if the Discord API returns an error code.

@@ -16,7 +16,7 @@ public class Field {
 
     /**
      * Constructor for Field.
-     * @param key  The key of the field (max 256 characters).
+     * @param key   The key of the field (max 256 characters).
      * @param value The value of the field (max 1024 characters).
      * @throws IllegalArgumentException if name or value exceed their character limits.
      */

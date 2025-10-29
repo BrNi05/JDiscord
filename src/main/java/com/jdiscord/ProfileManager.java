@@ -87,24 +87,24 @@ public class ProfileManager {
 
     /**
      * Save profile data to a JSON file.
-     * @param profileName Profile name (without .json extension).
-     * @param webhook Webhook URL.
-     * @param usernameInput Username input field.
+     * @param profileName        Profile name (without .json extension).
+     * @param webhook            Webhook URL.
+     * @param usernameInput      Username input field.
      * @param avatarIconUrlInput Avatar icon URL input field.
-     * @param msgInput Message input field.
-     * @param titleInput Title input field.
-     * @param descInput Description input field.
-     * @param pickedColor Picked color in decimal string format.
-     * @param titleUrlInput Title URL input field.
-     * @param authorInput Author name input field.
-     * @param authorUrlInput Author URL input field.
-     * @param authorIconInput Author icon URL input field.
-     * @param imageUrlInput Image URL input field.
-     * @param footerTextInput Footer text input field.
-     * @param footerIconInput Footer icon URL input field.
-     * @param timestampCheckbox Timestamp checkbox.
-     * @param dropdown Dropdown component for fields.
-     * @param filePathInput File path input field.
+     * @param msgInput           Message input field.
+     * @param titleInput         Title input field.
+     * @param descInput          Description input field.
+     * @param pickedColor        Picked color in decimal string format.
+     * @param titleUrlInput      Title URL input field.
+     * @param authorInput        Author name input field.
+     * @param authorUrlInput     Author URL input field.
+     * @param authorIconInput    Author icon URL input field.
+     * @param imageUrlInput      Image URL input field.
+     * @param footerTextInput    Footer text input field.
+     * @param footerIconInput    Footer icon URL input field.
+     * @param timestampCheckbox  Timestamp checkbox.
+     * @param dropdown           Dropdown component for fields.
+     * @param filePathInput      File path input field.
      * @throws IOException if an I/O error occurs during save.
      */
     public static void saveProfile(
@@ -157,22 +157,22 @@ public class ProfileManager {
 
     /**
      * Load profile data from a JSON file and populate input fields.
-     * @param profileName Profile name (without .json extension).
-     * @param usernameInput Username input field.
+     * @param profileName        Profile name (without .json extension).
+     * @param usernameInput      Username input field.
      * @param avatarIconUrlInput Avatar icon URL input field.
-     * @param msgInput Message input field.
-     * @param titleInput Title input field.
-     * @param descInput Description input field.
-     * @param titleUrlInput Title URL input field.
-     * @param authorInput Author name input field.
-     * @param authorUrlInput Author URL input field.
-     * @param authorIconInput Author icon URL input field.
-     * @param imageUrlInput Image URL input field.
-     * @param footerTextInput Footer text input field.
-     * @param footerIconInput Footer icon URL input field.
-     * @param timestampCheckbox Timestamp checkbox.
-     * @param dropdown Dropdown component for fields.
-     * @param filePathInput File path input field.
+     * @param msgInput           Message input field.
+     * @param titleInput         Title input field.
+     * @param descInput          Description input field.
+     * @param titleUrlInput      Title URL input field.
+     * @param authorInput        Author name input field.
+     * @param authorUrlInput     Author URL input field.
+     * @param authorIconInput    Author icon URL input field.
+     * @param imageUrlInput      Image URL input field.
+     * @param footerTextInput    Footer text input field.
+     * @param footerIconInput    Footer icon URL input field.
+     * @param timestampCheckbox  Timestamp checkbox.
+     * @param dropdown           Dropdown component for fields.
+     * @param filePathInput      File path input field.
      * @return Picked color in decimal string format, or null if loading failed.
      * @throws IOException if an I/O error occurs during load.
      */

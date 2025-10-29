@@ -439,22 +439,22 @@ public class JDiscordApp {
 
     /**
      * Send button event listener: send message
-     * @param webhook The webhook URL to send the message to.
-     * @param usernameInput The input field for the username.
+     * @param webhook            The webhook URL to send the message to.
+     * @param usernameInput      The input field for the username.
      * @param avatarIconUrlInput The input field for the avatar icon URL.
-     * @param msgInput The input field for the message text.
-     * @param titleInput The input field for the title text.
-     * @param descInput The input field for the description.
-     * @param pickedColor The picked color in decimal string format.
-     * @param titleUrlInput The input field for the title URL.
-     * @param authorInput The input field for the author name.
-     * @param authorUrlInput The input field for the author URL.
-     * @param authorIconInput The input field for the author icon URL.
-     * @param imageUrlInput The input field for the image URL.
-     * @param footerTextInput The input field for the footer text.
-     * @param footerIconInput The input field for the footer icon URL.
-     * @param timestampCheckbox The checkbox for including a timestamp.
-     * @param dropdown The dropdown containing the fields to include in the embed.
+     * @param msgInput           The input field for the message text.
+     * @param titleInput         The input field for the title text.
+     * @param descInput          The input field for the description.
+     * @param pickedColor        The picked color in decimal string format.
+     * @param titleUrlInput      The input field for the title URL.
+     * @param authorInput        The input field for the author name.
+     * @param authorUrlInput     The input field for the author URL.
+     * @param authorIconInput    The input field for the author icon URL.
+     * @param imageUrlInput      The input field for the image URL.
+     * @param footerTextInput    The input field for the footer text.
+     * @param footerIconInput    The input field for the footer icon URL.
+     * @param timestampCheckbox  The checkbox for including a timestamp.
+     * @param dropdown           The dropdown containing the fields to include in the embed.
      * Exceptions that are thrown deeper in the call stack are caught and handled here.
      */
     private static void sendMessage(
@@ -499,18 +499,16 @@ public class JDiscordApp {
                 timestampCheckbox.isSelected()
             );
             sender.sendMessage(message);
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | DiscordApiException e) {
             ErrorDialog.showError(null, e.getMessage());
         } catch (IOException e) {
             ErrorDialog.showError(null, "Failed to send message - network error.");
-        } catch (DiscordApiException e) {
-            ErrorDialog.showError(null, e.getMessage());
         }
     }
 
     /**
      * Send button event listener: send file
-     * @param webhook The webhook URL to send the file to.
+     * @param webhook       The webhook URL to send the file to.
      * @param usernameInput The input field for the username.
      * @param texInputField The input field for the message text.
      * @param filePathInput The input field for the file path.
@@ -541,7 +539,7 @@ public class JDiscordApp {
     /**
      * Helper method to create a copy of GridBagConstraints with modified gridy.
      * @param gbc The original GridBagConstraints object.
-     * @param y The new gridy value.
+     * @param y   The new gridy value.
      * @return A new GridBagConstraints object with the updated gridy.
      */
     private static GridBagConstraints row(GridBagConstraints gbc, int y) {

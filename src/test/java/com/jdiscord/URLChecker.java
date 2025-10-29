@@ -1,9 +1,16 @@
 package com.jdiscord;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 class URLCheckerTest {
+
+    // Set URLChecker to not check reachability during tests
+    @BeforeEach
+    void disableReachabilityCheck() {
+        URLChecker.setCheckReachability(false);
+    }
 
     @Test
     void testValidHttpsUrl() {

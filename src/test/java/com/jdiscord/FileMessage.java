@@ -2,6 +2,7 @@ package com.jdiscord;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,6 +17,12 @@ class FileMessageTest {
 
     @TempDir
     Path tempDir;
+
+    // Set URLChecker to not check reachability during tests
+    @BeforeEach
+    void disableReachabilityCheck() {
+        URLChecker.setCheckReachability(false);
+    }
 
     // Constructor test
 

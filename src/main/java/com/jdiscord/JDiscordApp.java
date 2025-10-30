@@ -265,7 +265,7 @@ public class JDiscordApp {
                 );
             }
         });
-    
+
         // Dropdown delete button event listener
         deleteBtn.addActionListener(event -> {
             ComboBoxModel<String> model = dropdown.getModel();
@@ -317,7 +317,7 @@ public class JDiscordApp {
             keyInput.setText("");
             valueInput.setText("");
         });
-        
+
         // Save profile button event listener
         saveProfileButton.addActionListener(event -> {
             // Set the profile input field
@@ -353,6 +353,9 @@ public class JDiscordApp {
 
             // Repopulate profiles dropdown
             populateProfilesDropdown(profileDropdown);
+
+            // Select the saved profile (and reload it)
+            profileDropdown.setSelectedItem(profileField.getText());
         });
 
         // Load profile dropdown event listener

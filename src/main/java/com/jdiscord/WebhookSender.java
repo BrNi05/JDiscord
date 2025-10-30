@@ -55,7 +55,7 @@ public class WebhookSender {
      * Get the current timestamp in ISO 8601 format.
      * @return The current timestamp as a string.
      */
-    private static String getTimestamp() {
+    private String getTimestamp() {
         return DateTimeFormatter.ISO_INSTANT.format(Instant.now());
     }
 

@@ -97,12 +97,6 @@ class ProfileManagerTest {
         assertFalse(ProfileManager.listProfiles().contains("p1"));
     }
 
-    @Test
-    void setGetWebhook() {
-        ProfileManager.setWebhook("https://discord.com/api/webhooks/abc123");
-        assertEquals("https://discord.com/api/webhooks/abc123", ProfileManager.getWebhook());
-    }
-
     // Exception test for deleteProfile when profile does not exist
     @Test
     void deleteProfileNonExistentThrows() {

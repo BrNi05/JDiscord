@@ -422,7 +422,7 @@ public class JDiscordApp {
      * If no profiles are saved, display "No saved profiles".
      * @param profileDropdown The JComboBox to populate.
      */
-    private static void populateProfilesDropdown(JComboBox<String> profileDropdown) {
+    private void populateProfilesDropdown(JComboBox<String> profileDropdown) {
         List<String> profiles = ProfileManager.listProfiles();
         DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 
@@ -457,7 +457,7 @@ public class JDiscordApp {
      * @param dropdown           The dropdown containing the fields to include in the embed.
      * Exceptions that are thrown deeper in the call stack are caught and handled here.
      */
-    private static void sendMessage(
+    private void sendMessage(
         String webhook,
         InputField usernameInput,
         InputField avatarIconUrlInput,
@@ -514,7 +514,7 @@ public class JDiscordApp {
      * @param filePathInput The input field for the file path.
      * Exceptions that are thrown deeper in the call stack are caught and handled here.
      */
-    private static void sendFileMessage(
+    private void sendFileMessage(
         String webhook,
         InputField usernameInput,
         InputField texInputField,
@@ -542,7 +542,7 @@ public class JDiscordApp {
      * @param y   The new gridy value.
      * @return A new GridBagConstraints object with the updated gridy.
      */
-    private static GridBagConstraints row(GridBagConstraints gbc, int y) {
+    private GridBagConstraints row(GridBagConstraints gbc, int y) {
         GridBagConstraints copy = (GridBagConstraints) gbc.clone();
         copy.gridy = y;
         return copy;

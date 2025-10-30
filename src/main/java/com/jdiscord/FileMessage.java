@@ -35,7 +35,7 @@ public class FileMessage extends MessageBase {
      * @param filepath The path to the file to be sent.
      * @throws IllegalArgumentException if the file path is invalid or the file does not meet criteria.
      */
-    private boolean setFilepath(String filepath) throws IllegalArgumentException {
+    private void setFilepath(String filepath) throws IllegalArgumentException {
         if (filepath.isEmpty()) {
             throw new IllegalArgumentException("Select a file to send");
         }
@@ -53,6 +53,5 @@ public class FileMessage extends MessageBase {
         }
 
         this.filepath = filepath;
-        return true;
     }
 }

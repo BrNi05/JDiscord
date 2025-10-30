@@ -52,7 +52,7 @@ public class Field {
      * @param dropdown The JComboBox containing field entries in "key:value" format.
      * @return A list of Field objects, or null if no valid fields are present.
      */
-    public static List<Field> parseDropdown(JComboBox <String> dropdown) {
+    public static List<Field> parseDropdown(JComboBox<String> dropdown) {
         ComboBoxModel<String> model = dropdown.getModel();
         List<Field> fields = new ArrayList<>();
 

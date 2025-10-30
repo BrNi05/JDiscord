@@ -19,7 +19,7 @@ public class URLChecker {
     private URLChecker() { }
 
     // Okhttp3 client instance
-    private static final OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient CLIENT = new OkHttpClient();
 
     // Toggle for reachability check
     private static boolean checkReachability = true;
@@ -38,7 +38,7 @@ public class URLChecker {
 
             Request request = new Request.Builder().url(url).get().build();
 
-            try (Response response = client.newCall(request).execute()) {
+            try (Response response = CLIENT.newCall(request).execute()) {
                 return result && response.isSuccessful();
             }
         } catch (Exception e) {
@@ -59,7 +59,7 @@ public class URLChecker {
 
         Request request = new Request.Builder().url(url).get().build();
 
-        try (Response response = client.newCall(request).execute()) {
+        try (Response response = CLIENT.newCall(request).execute()) {
             return response.code() == 200;
         } catch (IOException e) {
             return false; // network error or invalid URL

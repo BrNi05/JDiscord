@@ -43,7 +43,7 @@ class ProfileData {
  */
 public class ProfileManager {
     // Gson instance for JSON serialization/deserialization
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     // Save directory
     private static String saveDir = null;
@@ -75,14 +75,6 @@ public class ProfileManager {
      */
     public static String getWebhook() {
         return webhook;
-    }
-
-    /**
-     * Set the currently loaded webhook URL.
-     * @param webhook Webhook URL.
-     */
-    public static void setWebhook(String webhook) {
-        ProfileManager.webhook = webhook;
     }
 
     /**
@@ -151,7 +143,7 @@ public class ProfileManager {
         data.filePath = filePathInput.getValue();
 
         try (FileWriter writer = new FileWriter(new File(saveDir, profileName + JSON_EXT))) {
-            gson.toJson(data, writer);
+            GSON.toJson(data, writer);
         }
     }
 
@@ -195,7 +187,7 @@ public class ProfileManager {
         InputField filePathInput
     ) throws IOException {
         try (FileReader reader = new FileReader(new File(saveDir, profileName + JSON_EXT))) {
-            ProfileData data = gson.fromJson(reader, ProfileData.class);
+            ProfileData data = GSON.fromJson(reader, ProfileData.class);
 
             webhook = data.webhook;
             usernameInput.setValue(data.username);

@@ -56,7 +56,7 @@ class MessageTest {
 
     @Test
     void settersThrowOnInvalidInput() {
-        Message msg = new Message(null, null, null, null, null, null,
+        Message msg = new Message(null, null, null, null, "title", null,
             null, null, null, null, null, null, null, null, null, false);
 
         // Title length > 256

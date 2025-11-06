@@ -196,10 +196,10 @@ public class Message extends MessageBase {
     /**
      * Set the embed title.
      * @param title The embed title (optional, max 256 characters).
-     * @throws IllegalArgumentException if the title exceeds 256 characters.
+     * @throws IllegalArgumentException if the title exceeds 256 characters or if it is empty.
      */
     public void setTitle(String title) throws IllegalArgumentException {
-        if (title == null) return;
+        if (title == null || title.trim().isEmpty()) throw new IllegalArgumentException("Title cannot be empty");
 
         if (title.length() <= 256) {
             this.title = title;

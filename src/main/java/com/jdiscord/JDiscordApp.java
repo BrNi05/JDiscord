@@ -536,7 +536,7 @@ public class JDiscordApp {
             ErrorDialog.showError(null, e.getMessage());
         } catch (IOException e) {
             ErrorDialog.showError(null, "Failed to send file: " + e.getMessage());
-        } 
+        }
     }
 
     /**

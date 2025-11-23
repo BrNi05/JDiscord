@@ -346,7 +346,7 @@ public class JDiscordApp {
                     filePathInput
                 );
             } catch (IOException e) {
-                ErrorDialog.showError(null, "Failed to save profile: " + profileField.getText());
+                ErrorDialog.showError(frame, "Failed to save profile: " + profileField.getText());
                 return;
             }
 
@@ -382,7 +382,7 @@ public class JDiscordApp {
                     filePathInput
                 );
             } catch (IOException e) {
-                ErrorDialog.showError(null, "Failed to load profile: " + profileDropdown.getSelectedItem());
+                ErrorDialog.showError(frame, "Failed to load profile: " + profileDropdown.getSelectedItem());
                 return;
             }
 
@@ -401,7 +401,7 @@ public class JDiscordApp {
             try {
                 ProfileManager.deleteProfile((String) profileDropdown.getSelectedItem());
             } catch (IOException e) {
-                ErrorDialog.showError(null, e.getMessage());
+                ErrorDialog.showError(frame, e.getMessage());
                 return;
             }
 
@@ -503,9 +503,9 @@ public class JDiscordApp {
             );
             sender.sendMessage(message);
         } catch (IllegalArgumentException | DiscordApiException e) {
-            ErrorDialog.showError(null, e.getMessage());
+            ErrorDialog.showError(frame, e.getMessage());
         } catch (IOException e) {
-            ErrorDialog.showError(null, "Failed to send message - network error.");
+            ErrorDialog.showError(frame, "Failed to send message - network error.");
         }
     }
 
@@ -533,9 +533,9 @@ public class JDiscordApp {
             );
             sender.sendFile(fileMessage);
         } catch (IllegalArgumentException | DiscordApiException e) {
-            ErrorDialog.showError(null, e.getMessage());
+            ErrorDialog.showError(frame, e.getMessage());
         } catch (IOException e) {
-            ErrorDialog.showError(null, "Failed to send file: " + e.getMessage());
+            ErrorDialog.showError(frame, "Failed to send file: " + e.getMessage());
         }
     }
 

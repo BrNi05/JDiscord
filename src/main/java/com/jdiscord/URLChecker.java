@@ -18,10 +18,9 @@ public class URLChecker {
      */
     private URLChecker() { }
 
-    // Okhttp3 client instance
     private static final OkHttpClient CLIENT = new OkHttpClient();
 
-    // Toggle for reachability check
+    // Toggle for reachability check (uses network)
     private static boolean checkReachability = true;
 
     /**
@@ -60,7 +59,7 @@ public class URLChecker {
         Request request = new Request.Builder().url(url).get().build();
 
         try (Response response = CLIENT.newCall(request).execute()) {
-            return response.code() == 200;
+            return response.code() == 200; // Discord API return HTTP 200 (OK) for GET requests
         } catch (IOException e) {
             return false; // network error or invalid URL
         }

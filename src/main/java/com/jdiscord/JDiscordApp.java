@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JCheckBox;
-import javax.swing.JScrollPane;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ComboBoxModel;
@@ -185,8 +184,8 @@ public class JDiscordApp {
         rightPanel.add(filePanel, row(gbcR, 4));
 
         // Split the main UI
-        mainCenter.add(new JScrollPane(leftPanel));
-        mainCenter.add(new JScrollPane(rightPanel));
+        mainCenter.add(leftPanel);
+        mainCenter.add(rightPanel);
         frame.add(mainCenter, BorderLayout.CENTER);
 
         // Main UI: bottom panel
@@ -417,6 +416,7 @@ public class JDiscordApp {
             }
         });
 
+        // Show the window
         frame.setVisible(true);
     }
 

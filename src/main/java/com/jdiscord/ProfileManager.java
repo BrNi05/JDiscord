@@ -42,13 +42,12 @@ class ProfileData {
  * Profile manager for saving and loading profiles.
  */
 public class ProfileManager {
-    // Gson instance for JSON serialization/deserialization
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     // Save directory
     private static String saveDir = null;
 
-    // Loaded webhook
+    // Loaded webhook (same as the one appears on the UI)
     private static String webhook = null;
 
     // Consts

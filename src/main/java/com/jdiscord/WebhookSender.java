@@ -31,11 +31,9 @@ import okhttp3.Response;
  * A class for sending messages and files using a Discord webhook.
  */
 public class WebhookSender {
-    // The webhook URL
     private URL webhookUrl;
 
-    // OkHttpClient instance for file uploads
-    private final OkHttpClient client = new OkHttpClient();
+    private final OkHttpClient client = new OkHttpClient(); // only used for file uploads
 
     /**
      * Constructor for WebhookSender.
@@ -220,10 +218,7 @@ public class WebhookSender {
             .build();
 
         // Request
-        Request request = new Request.Builder()
-            .url(webhookUrl)
-            .post(body)
-            .build();
+        Request request = new Request.Builder().url(webhookUrl).post(body).build();
 
         // Execute
         try (Response response = client.newCall(request).execute()) {

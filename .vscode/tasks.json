@@ -33,13 +33,6 @@
             "problemMatcher": []
         },
         {
-            "label": "Maven Test",
-            "type": "shell",
-            "command": "mvn test",
-            "group": "test",
-            "problemMatcher": []
-        },
-        {
             "label": "Maven Test + Covg",
             "type": "shell",
             "command": "mvn clean verify",
@@ -47,7 +40,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Open JaCoCo report",
+            "label": "Open JaCoCo report (Windows)",
             "type": "shell",
             "command": "start \"\" \"${workspaceFolder}/target/site/jacoco/index.html\"",
             "presentation": {
@@ -58,9 +51,33 @@
             "problemMatcher": []
         },
         {
-            "label": "Generate Docs",
+            "label": "Open JaCoCo report (macOS)",
+            "type": "shell",
+            "command": "open \"${workspaceFolder}/target/site/jacoco/index.html\"",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared",
+                "clear": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Generate Docs (Windows)",
             "type": "shell",
             "command": "powershell -Command \"mvn javadoc:javadoc; Start-Process 'target/reports/apidocs/index.html'\"",
+            "group": "build",
+            "problemMatcher": [],
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Generate Docs (macOS)",
+            "type": "shell",
+            "command": "mvn javadoc:javadoc && open \"${workspaceFolder}/target/reports/apidocs/index.html\"",
             "group": "build",
             "problemMatcher": [],
             "presentation": {

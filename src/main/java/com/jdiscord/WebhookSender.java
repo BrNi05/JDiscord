@@ -203,7 +203,7 @@ public class WebhookSender {
     public void postFile(File file, String payload) throws IOException, DiscordApiException {
         MediaType fileType = MediaType.parse("application/octet-stream");
         try {
-            MediaType.parse(Files.probeContentType(file.toPath()));
+            fileType = MediaType.parse(Files.probeContentType(file.toPath()));
         } catch (IOException e) {
             throw new IOException("Failed to determine file type.");
         }

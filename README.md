@@ -1,11 +1,12 @@
 # JDiscord
 
-JDiscord: A Java-based Discord webhook GUI tool for sending messages, files, and rich embeds.
+A Java-based GUI tool for sending Discord webhook messages, files, and rich embeds.
 
 ## How to use
 
 The following section introduces the JDiscord user interface and its usage patterns.
-JDiscord includes a menu bar and multiple titled panels that group related features:
+
+JDiscord includes a menu bar and multiple titled panels that group related features together:
 
 ### Menu bar
 
@@ -20,7 +21,7 @@ JDiscord includes a menu bar and multiple titled panels that group related featu
 
 - `Delete profile`: deletes the currently selected dropdown item (a saved profile)
 
->[!WARN]
+> [!WARNING]
 > Selecting an item in the dropdown automatically loads the profile, instantly overwriting all currently entered data (without confirmation).
 > Deleting a profile also counts as a selection: after deletion, the alphabetically first profile is automatically loaded (because the dropdown is rebuilt, triggering the event listener).
 
@@ -30,7 +31,7 @@ JDiscord includes a menu bar and multiple titled panels that group related featu
 
 - `Username`: the username of the user (bot) sending the message
 
->[!TIP]
+> [!TIP]
 > Left empty, the message will appear under the name configured for the webhook on the Discord server.
 
 - `Message Text`: the content of the message (displayed above the message box)
@@ -43,7 +44,7 @@ JDiscord includes a menu bar and multiple titled panels that group related featu
 
 - `Title Text`: the title of the message (displayed as part of the message box, above the description)
 
->[!IMPORTANT]
+> [!IMPORTANT]
 > Title is a required field unless you are sending a file.
 
 - `Title URL`: a link embedded into the title text
@@ -54,8 +55,8 @@ JDiscord includes a menu bar and multiple titled panels that group related featu
 
 - `Fields`: key–value pairs displayed inside the message box, side by side
 
->[!TIP]
-> Added fields can be deleted by using the dropdown and the `Delete` button
+> [!TIP]
+> Added fields can be deleted by using the dropdown and the `Delete` button.
 
 ### Author
 
@@ -67,10 +68,10 @@ JDiscord includes a menu bar and multiple titled panels that group related featu
 
 - `File to send`: the file you want to send
 
->[!TIP]
+> [!TIP]
 > You can send any type of file. Discord can render certain file types without downloading them, such as text files, images, videos, etc.
 
->[!IMPORTANT]
+> [!IMPORTANT]
 > According to the Discord API, embeds and file uploads cannot be included in the same message.
 > When sending a file, only `Username`, `Description`, and `Webhook` are processed and sent - all other fields are ignored.
 
@@ -78,7 +79,7 @@ JDiscord includes a menu bar and multiple titled panels that group related featu
 
 - `Webhook URL`: the webhook you want to use (server- and channel-specific)
 
->[!IMPORTANT]
+> [!IMPORTANT]
 > After loading a profile, you may clear the webhook URL (for security reasons).
 > If the field is empty, JDiscord will use the internally loaded webhook.
 
@@ -88,5 +89,5 @@ JDiscord includes a menu bar and multiple titled panels that group related featu
 
 - `Include Timestamp`: toggle for including the message timestamp at the bottom
 
->[!IMPORTANT]
-> All inputs are validated based on API constraints and reasonable expectations. For example, links must be valid and accessible.
+> [!IMPORTANT]
+> All user inputs are validated based on API constraints and reasonable expectations. For example, links must be valid and accessible.

@@ -53,6 +53,9 @@ JDiscord includes a menu bar and multiple titled panels that group related featu
 
 - `Image URL`: a link to an image to include as part of the message
 
+> [!WARNING]
+> Discord (API) will not process some (smaller) image resolutions. If a sent image does not appear, this happened.
+
 - `Fields`: key–value pairs displayed inside the message box, side by side
 
 > [!TIP]

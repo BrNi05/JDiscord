@@ -211,10 +211,8 @@ public class WebhookSender {
         // Request body
         RequestBody body = new MultipartBody.Builder()
             .setType(MultipartBody.FORM)
-            .addFormDataPart("payload_json", null,
-                RequestBody.create(payload, MediaType.parse("application/json; charset=utf-8")))
-            .addFormDataPart("file", file.getName(),
-                RequestBody.create(file, fileType))
+            .addFormDataPart("payload_json", null, RequestBody.create(payload, MediaType.parse("application/json; charset=utf-8")))
+            .addFormDataPart("file", file.getName(), RequestBody.create(file, fileType))
             .build();
 
         // Request

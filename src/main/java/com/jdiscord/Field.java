@@ -14,6 +14,9 @@ public class Field {
     private String key = null;
     private String value = null;
 
+    // Consts
+    private static final String NO_ASSIGNED_FIELDS = "No assigned fields";
+
     /**
      * Constructor for Field.
      * @param key   The key of the field (max 256 characters).
@@ -56,7 +59,7 @@ public class Field {
         ComboBoxModel<String> model = dropdown.getModel();
         List<Field> fields = new ArrayList<>();
 
-        if (model.getSize() == 1 && model.getElementAt(0).equals("No assigned fields")) return Collections.emptyList();
+        if (model.getSize() == 1 && model.getElementAt(0).equals(NO_ASSIGNED_FIELDS)) return Collections.emptyList();
 
         for (int i = 0; i < model.getSize(); i++) {
             String item = model.getElementAt(i);
@@ -66,5 +69,13 @@ public class Field {
         }
 
         return fields;
+    }
+
+    /**
+     * Returns NO_ASSIGNED_FIELDS constant for the UI.
+     * @return NO_ASSIGNED_FIELDS string.
+     */
+    public static String getNoAssignedFields() {
+        return NO_ASSIGNED_FIELDS;
     }
 }

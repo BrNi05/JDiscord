@@ -40,7 +40,6 @@ public class JDiscordApp {
     private String pickedColor = DEFAULT_COLOR;
 
     // Consts
-    private static final String NO_ASSIGNED_FIELDS = "No assigned fields";
     private static final String NO_PROFILE = "No saved profiles";
 
     /**
@@ -140,7 +139,7 @@ public class JDiscordApp {
         rightPanel.add(imageUrlInput.getPanel(), row(gbcR, 0));
 
         JPanel dropdownPanel = new JPanel(new BorderLayout(5, 0));
-        JComboBox<String> dropdown = new JComboBox<>(new String[]{NO_ASSIGNED_FIELDS});
+        JComboBox<String> dropdown = new JComboBox<>(new String[]{Field.getNoAssignedFields()});
         JButton deleteBtn = new JButton("Delete");
         dropdownPanel.add(dropdown, BorderLayout.CENTER);
         dropdownPanel.add(deleteBtn, BorderLayout.EAST);
@@ -268,7 +267,7 @@ public class JDiscordApp {
         // Dropdown delete button event listener
         deleteBtn.addActionListener(event -> {
             ComboBoxModel<String> model = dropdown.getModel();
-            if (model.getSize() == 1 && model.getElementAt(0).equals(NO_ASSIGNED_FIELDS)) return;
+            if (model.getSize() == 1 && model.getElementAt(0).equals(Field.getNoAssignedFields())) return;
 
             int selectedIndex = dropdown.getSelectedIndex();
             if (selectedIndex != -1) {
@@ -279,7 +278,7 @@ public class JDiscordApp {
                     }
                 }
                 if (newModel.getSize() == 0) {
-                    newModel.addElement(NO_ASSIGNED_FIELDS);
+                    newModel.addElement(Field.getNoAssignedFields());
                 }
                 dropdown.setModel(newModel);
             }
@@ -305,7 +304,7 @@ public class JDiscordApp {
             // Construct new model
             DefaultComboBoxModel<String> newModel = new DefaultComboBoxModel<>();
             for (int i = 0; i < model.getSize(); i++) {
-                if (!model.getElementAt(i).equals(NO_ASSIGNED_FIELDS)) {
+                if (!model.getElementAt(i).equals(Field.getNoAssignedFields())) {
                     newModel.addElement(model.getElementAt(i));
                 }
             }
